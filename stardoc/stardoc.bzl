@@ -14,7 +14,7 @@
 
 """Starlark rule for stardoc: a documentation generator tool written in Java."""
 
-load("@bazel_skylib//:bzl_library.bzl", "StarlarkLibraryInfo")
+load("//third_party/bazel_skylib:bzl_library.bzl", "StarlarkLibraryInfo")
 
 def _root_from_file(f):
     """Given a file, returns the root path of that file."""
@@ -34,6 +34,7 @@ def _stardoc_impl(ctx):
     args.add("--input=" + str(ctx.file.input.owner))
     args.add("--output=" + ctx.outputs.out.path)
     args.add("--workspace_name=" + ctx.workspace_name)
+    args.add("--output_format=" + ctx.attr.format)
     args.add_all(
         ctx.attr.symbol_names,
         format_each = "--symbols=%s",
@@ -82,6 +83,11 @@ This rule is an experimental replacement for the existing skylark_doc rule.
             doc = "A list of skylark_library dependencies which the input depends on.",
             providers = [StarlarkLibraryInfo],
         ),
+        "format": attr.string(
+            doc = "The format of the output file.",
+            default = "markdown",
+            values = ["markdown", "proto"],
+        ),
         "out": attr.output(
             doc = "The (markdown) file to which documentation will be output.",
             mandatory = True,
@@ -108,7 +114,7 @@ non-default semantic flags required to use the given Starlark symbols.
         "stardoc": attr.label(
             doc = "The location of the stardoc tool.",
             allow_files = True,
-            default = Label("//stardoc:stardoc"),
+            default = Label("//third_party/bazel/src/main/java/com/google/devtools/build/skydoc"),
             cfg = "host",
             executable = True,
         ),
