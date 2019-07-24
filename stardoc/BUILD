@@ -26,7 +26,7 @@ bzl_library(
     name = "stardoc_lib",
     srcs = ["stardoc.bzl"],
     deps = [
-        "//third_party/bazel_skylib:bzl_library",
+         "@bazel_skylib//:bzl_library",
     ],
 )
 
