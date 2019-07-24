@@ -9,8 +9,8 @@ exports_files([
     "templates/rule.vm",
 ])
 
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")	exports_files([
-load("//stardoc:stardoc.bzl", "stardoc")	    "templates/header.vm",
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("//stardoc:stardoc.bzl", "stardoc")
 
 filegroup(
     name = "test_deps",
