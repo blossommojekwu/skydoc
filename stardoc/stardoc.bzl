@@ -158,22 +158,22 @@ non-default semantic flags required to use the given Starlark symbols.
         "header_template": attr.label(
             doc = "The input file template for header generated in documentation.",
             allow_single_file = [".vm", ".txt"],
-            default = Label("//stardoc:stardoc/templates/header.vm"),
+            default = Label("//stardoc:templates/header.vm"),
         ),
         "func_template": attr.label(
             doc = "The input file template for functions generated in documentation.",
             allow_single_file = [".vm", ".txt"],
-            default = Label("//stardoc:stardoc/templates/func.vm"),
+            default = Label("//stardoc:templates/func.vm"),
         ),
         "provider_template": attr.label(
             doc = "The input file template for providers generated in documentation.",
             allow_single_file = [".vm", ".txt"],
-            default = Label("//stardoc:stardoc/templates/provider.vm"),
+            default = Label("//stardoc:templates/provider.vm"),
         ),
         "rule_template": attr.label(
             doc = "The input file template for rules generated in documentation.",
             allow_single_file = [".vm", ".txt"],
-            default = Label("//stardoc:stardoc/templates/rule.vm"),
+            default = Label("//stardoc:templates/rule.vm"),
         ),
     },
 )
