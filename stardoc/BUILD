@@ -1,10 +1,16 @@
 licenses(["notice"])  # Apache 2.0
 
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//visibility:private"])
 
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//stardoc:stardoc.bzl", "stardoc")
-load("@rules_java//java:defs.bzl", "java_binary", "java_import")
+exports_files([
+    "templates/header.vm",
+    "templates/func.vm",
+    "templates/provider.vm",
+    "templates/rule.vm",
+])
+
+load("//third_party/bazel_skylib:bzl_library.bzl", "bzl_library")
+load("//third_party/py/skydoc/stardoc:stardoc.bzl", "stardoc")
 
 filegroup(
     name = "test_deps",
@@ -19,7 +25,7 @@ bzl_library(
     name = "stardoc_lib",
     srcs = ["stardoc.bzl"],
     deps = [
-        "@bazel_skylib//:bzl_library",
+        "//third_party/bazel_skylib:bzl_library",
     ],
 )
 
