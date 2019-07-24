@@ -19,7 +19,6 @@ py_library(
 py_test(
     name = "common_test",
     srcs = ["common_test.py"],
-    python_version = "PY2",
     deps = [
         ":common",
     ],
@@ -33,7 +32,6 @@ py_library(
 py_test(
     name = "load_extractor_test",
     srcs = ["load_extractor_test.py"],
-    python_version = "PY2",
     deps = [
         ":load_extractor",
     ],
@@ -48,7 +46,6 @@ py_library(
 py_test(
     name = "macro_extractor_test",
     srcs = ["macro_extractor_test.py"],
-    python_version = "PY2",
     deps = [
         ":build_pb_py",
         ":macro_extractor",
@@ -68,7 +65,6 @@ py_library(
 py_test(
     name = "rule_extractor_test",
     srcs = ["rule_extractor_test.py"],
-    python_version = "PY2",
     deps = [
         ":build_pb_py",
         ":load_extractor",
@@ -92,9 +88,7 @@ py_binary(
         "//skydoc/sass:main.css",
         "//skydoc/templates",
     ],
-    # no py_binary launcher
     main = "main.py",
-    python_version = "PY2",
     deps = [
         ":common",
         ":macro_extractor",

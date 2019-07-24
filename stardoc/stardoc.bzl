@@ -14,7 +14,7 @@
 
 """Starlark rule for stardoc: a documentation generator tool written in Java."""
 
-load("//third_party/bazel_skylib:bzl_library.bzl", "StarlarkLibraryInfo")
+load("@bazel_skylib//:bzl_library.bzl", "StarlarkLibraryInfo")
 
 def _root_from_file(f):
     """Given a file, returns the root path of that file."""
@@ -30,11 +30,11 @@ def _stardoc_impl(ctx):
         dep[StarlarkLibraryInfo].transitive_srcs
         for dep in ctx.attr.deps
     ])
-    stardoc_args = ctx.actions.args()
-    stardoc_args.add("--input=" + str(ctx.file.input.owner))
-    stardoc_args.add("--workspace_name=" + ctx.workspace_name)
-    stardoc_args.add("--output_format=proto")
-    stardoc_args.add_all(
+    args = ctx.actions.args()
+    args.add("--input=" + str(ctx.file.input.owner))
+    args.add("--output=" + ctx.outputs.out.path)
+    args.add("--workspace_name=" + ctx.workspace_name)
+    args.add_all(
         ctx.attr.symbol_names,
         format_each = "--symbols=%s",
         omit_if_empty = True,
@@ -47,56 +47,24 @@ def _stardoc_impl(ctx):
     # disabled). The correct way to resolve this is to explicitly specify
     # the full set of transitive dependency Starlark files as action args
     # (maybe using a param file), but this requires some work.
-    stardoc_args.add_all(
+    args.add_all(
         input_files,
         format_each = "--dep_roots=%s",
         map_each = _root_from_file,
         omit_if_empty = True,
         uniquify = True,
     )
-    stardoc_args.add_all(ctx.attr.semantic_flags)
+    args.add_all(ctx.attr.semantic_flags)
     stardoc = ctx.executable.stardoc
-
-    if ctx.attr.format == "proto":
-        stardoc_args.add("--output=" + out_file.path)
-        ctx.actions.run(
-            outputs = [out_file],
-            inputs = input_files,
-            executable = stardoc,
-            arguments = [stardoc_args],
-            mnemonic = "Stardoc",
-            progress_message = ("Generating Starlark doc for %s" %
-                                (ctx.label.name)),
-        )
-    elif ctx.attr.format == "markdown":
-        proto_file = ctx.actions.declare_file(ctx.label.name + ".raw", sibling = out_file)
-        stardoc_args.add("--output=" + proto_file.path)
-        ctx.actions.run(
-            outputs = [proto_file],
-            inputs = input_files,
-            executable = stardoc,
-            arguments = [stardoc_args],
-            mnemonic = "Stardoc",
-            progress_message = ("Generating proto for Starlark doc for %s" %
-                                (ctx.label.name)),
-        )
-        renderer_args = ctx.actions.args()
-        renderer_args.add("--input=" + str(proto_file.path))
-        renderer_args.add("--output=" + str(ctx.outputs.out.path))
-        renderer_args.add("--header_template=" + str(ctx.file.header_template.path))
-        renderer_args.add("--func_template=" + str(ctx.file.func_template.path))
-        renderer_args.add("--provider_template=" + str(ctx.file.provider_template.path))
-        renderer_args.add("--rule_template=" + str(ctx.file.rule_template.path))
-        renderer = ctx.executable.renderer
-        ctx.actions.run(
-            outputs = [out_file],
-            inputs = [proto_file, ctx.file.header_template, ctx.file.func_template, ctx.file.provider_template, ctx.file.rule_template],
-            executable = renderer,
-            arguments = [renderer_args],
-            mnemonic = "Renderer",
-            progress_message = ("Converting proto format of %s to markdown format" %
-                                (ctx.label.name)),
-        )
+    ctx.actions.run(
+        outputs = [out_file],
+        inputs = input_files,
+        executable = stardoc,
+        arguments = [args],
+        mnemonic = "Stardoc",
+        progress_message = ("Generating Starlark doc for %s" %
+                            (ctx.label.name)),
+    )
 
 stardoc = rule(
     _stardoc_impl,
@@ -113,11 +81,6 @@ This rule is an experimental replacement for the existing skylark_doc rule.
         "deps": attr.label_list(
             doc = "A list of skylark_library dependencies which the input depends on.",
             providers = [StarlarkLibraryInfo],
-        ),
-        "format": attr.string(
-            doc = "The format of the output file.",
-            default = "markdown",
-            values = ["markdown", "proto"],
         ),
         "out": attr.output(
             doc = "The (markdown) file to which documentation will be output.",
@@ -145,36 +108,9 @@ non-default semantic flags required to use the given Starlark symbols.
         "stardoc": attr.label(
             doc = "The location of the stardoc tool.",
             allow_files = True,
-            default = Label("//third_party/bazel/src/main/java/com/google/devtools/build/skydoc"),
+            default = Label("//stardoc:stardoc"),
             cfg = "host",
             executable = True,
-        ),
-        "renderer": attr.label(
-            doc = "The location of the renderer tool.",
-            allow_files = True,
-            default = Label("//third_party/bazel/src/main/java/com/google/devtools/build/skydoc/renderer"),
-            cfg = "host",
-            executable = True,
-        ),
-        "header_template": attr.label(
-            doc = "The input file template for header generated in documentation.",
-            allow_single_file = [".vm", ".txt"],
-            default = Label("//third_party/py/skydoc/stardoc:templates/header.vm"),
-        ),
-        "func_template": attr.label(
-            doc = "The input file template for functions generated in documentation.",
-            allow_single_file = [".vm", ".txt"],
-            default = Label("//third_party/py/skydoc/stardoc:templates/func.vm"),
-        ),
-        "provider_template": attr.label(
-            doc = "The input file template for providers generated in documentation.",
-            allow_single_file = [".vm", ".txt"],
-            default = Label("//third_party/py/skydoc/stardoc:templates/provider.vm"),
-        ),
-        "rule_template": attr.label(
-            doc = "The input file template for rules generated in documentation.",
-            allow_single_file = [".vm", ".txt"],
-            default = Label("//third_party/py/skydoc/stardoc:templates/rule.vm"),
         ),
     },
 )

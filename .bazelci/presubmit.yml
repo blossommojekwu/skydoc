@@ -20,5 +20,3 @@ platforms:
     - "..."
     test_targets:
     - "..."
-
-buildifier: latest
