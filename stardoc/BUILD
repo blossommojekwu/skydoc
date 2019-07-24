@@ -9,8 +9,9 @@ exports_files([
     "templates/rule.vm",
 ])
 
-load("//third_party/bazel_skylib:bzl_library.bzl", "bzl_library")
-load("//third_party/py/skydoc/stardoc:stardoc.bzl", "stardoc")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")	exports_files([
+load("//stardoc:stardoc.bzl", "stardoc")	    "templates/header.vm",
+load("@rules_java//java:defs.bzl", "java_binary", "java_import")
 
 filegroup(
     name = "test_deps",
