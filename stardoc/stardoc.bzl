@@ -14,7 +14,7 @@
 
 """Starlark rule for stardoc: a documentation generator tool written in Java."""
 
-load("@bazel_skylib//:bzl_library.bzl", "StarlarkLibraryInfo")
+load("//third_party/bazel_skylib:bzl_library.bzl", "StarlarkLibraryInfo")
 
 def _root_from_file(f):
     """Given a file, returns the root path of that file."""
@@ -56,7 +56,7 @@ def _stardoc_impl(ctx):
     )
     stardoc_args.add_all(ctx.attr.semantic_flags)
     stardoc = ctx.executable.stardoc
-    
+
     if ctx.attr.format == "proto":
         stardoc_args.add("--output=" + out_file.path)
         ctx.actions.run(
@@ -83,17 +83,21 @@ def _stardoc_impl(ctx):
         renderer_args = ctx.actions.args()
         renderer_args.add("--input=" + str(proto_file.path))
         renderer_args.add("--output=" + str(ctx.outputs.out.path))
+        renderer_args.add("--header_template=" + str(ctx.file.header_template.path))
+        renderer_args.add("--func_template=" + str(ctx.file.func_template.path))
+        renderer_args.add("--provider_template=" + str(ctx.file.provider_template.path))
+        renderer_args.add("--rule_template=" + str(ctx.file.rule_template.path))
         renderer = ctx.executable.renderer
         ctx.actions.run(
             outputs = [out_file],
-            inputs = [proto_file],
+            inputs = [proto_file, ctx.file.header_template, ctx.file.func_template, ctx.file.provider_template, ctx.file.rule_template],
             executable = renderer,
             arguments = [renderer_args],
             mnemonic = "Renderer",
             progress_message = ("Converting proto format of %s to markdown format" %
                                 (ctx.label.name)),
         )
-        
+
 stardoc = rule(
     _stardoc_impl,
     doc = """
@@ -141,16 +145,36 @@ non-default semantic flags required to use the given Starlark symbols.
         "stardoc": attr.label(
             doc = "The location of the stardoc tool.",
             allow_files = True,
-            default = Label("//stardoc:stardoc"),
+            default = Label("//third_party/bazel/src/main/java/com/google/devtools/build/skydoc"),
             cfg = "host",
             executable = True,
         ),
         "renderer": attr.label(
             doc = "The location of the renderer tool.",
             allow_files = True,
-            default = Label("//stardoc:renderer"),
+            default = Label("//third_party/bazel/src/main/java/com/google/devtools/build/skydoc/renderer"),
             cfg = "host",
             executable = True,
+        ),
+        "header_template": attr.label(
+            doc = "The input file template for header generated in documentation.",
+            allow_single_file = [".vm", ".txt"],
+            default = Label("//third_party/py/skydoc/stardoc:templates/header.vm"),
+        ),
+        "func_template": attr.label(
+            doc = "The input file template for functions generated in documentation.",
+            allow_single_file = [".vm", ".txt"],
+            default = Label("//third_party/py/skydoc/stardoc:templates/func.vm"),
+        ),
+        "provider_template": attr.label(
+            doc = "The input file template for providers generated in documentation.",
+            allow_single_file = [".vm", ".txt"],
+            default = Label("//third_party/py/skydoc/stardoc:templates/provider.vm"),
+        ),
+        "rule_template": attr.label(
+            doc = "The input file template for rules generated in documentation.",
+            allow_single_file = [".vm", ".txt"],
+            default = Label("//third_party/py/skydoc/stardoc:templates/rule.vm"),
         ),
     },
 )
