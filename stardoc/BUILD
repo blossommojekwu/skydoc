@@ -11,7 +11,6 @@ exports_files([
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")	exports_files([
 load("//stardoc:stardoc.bzl", "stardoc")	    "templates/header.vm",
-load("@rules_java//java:defs.bzl", "java_binary", "java_import")
 
 filegroup(
     name = "test_deps",
