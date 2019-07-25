@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Starlark rule for stardoc: a documentation generator tool written in Java."""
+
 load("@bazel_skylib//:bzl_library.bzl", "StarlarkLibraryInfo")
 
 def _root_from_file(f):
