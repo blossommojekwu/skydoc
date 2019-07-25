@@ -57,15 +57,15 @@ This rule is an experimental replacement for the existing skylark_doc rule.
           The input file template for functions generated in documentation.
         </p>
       </td>
-     </tr>
-     <tr id="stardoc-header_template">
-       <td><code>header_template</code></td>
-       <td>
-         <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
-         <p>
-           The input file template for header generated in documentation.
-         </p>
-       </td>
+      </tr>
+      <tr id="stardoc-header_template">
+        <td><code>header_template</code></td>
+        <td>
+          <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+          <p>
+            The input file template for header generated in documentation.
+          </p>
+        </td>
     </tr>
     <tr id="stardoc-input">
       <td><code>input</code></td>
@@ -102,10 +102,10 @@ This rule is an experimental replacement for the existing skylark_doc rule.
           The location of the renderer tool.
         </p>
       </td>
-     </tr>
-     <tr id="stardoc-rule_template">
-       <td><code>rule_template</code></td>
-       <td>
+      </tr>
+      <tr id="stardoc-rule_template">
+        <td><code>rule_template</code></td>
+        <td>
         <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
         <p>
           The input file template for rules generated in documentation. 
