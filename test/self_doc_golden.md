@@ -50,13 +50,13 @@ This rule is an experimental replacement for the existing skylark_doc rule.
       </td>
     </tr>
     <tr id="stardoc-func_template">
-       <td><code>func_template</code></td>
-       <td>
-         <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
-         <p>
-           The input file template for functions generated in documentation.
-         </p>
-       </td>
+      <td><code>func_template</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+        <p>
+          The input file template for functions generated in documentation.
+        </p>
+      </td>
      </tr>
      <tr id="stardoc-header_template">
        <td><code>header_template</code></td>
@@ -66,7 +66,7 @@ This rule is an experimental replacement for the existing skylark_doc rule.
            The input file template for header generated in documentation.
          </p>
        </td>
-     </tr>
+    </tr>
     <tr id="stardoc-input">
       <td><code>input</code></td>
       <td>
@@ -87,28 +87,28 @@ This rule is an experimental replacement for the existing skylark_doc rule.
     </tr>
     <tr id="stardoc-provider_template">
       <td><code>provider_template</code></td>
-       <td>
-         <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
-         <p>
-           The input file template for providers generated in documentation.
-         </p>
-       </td>
-     </tr>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+        <p>
+          The input file template for providers generated in documentation.
+        </p>
+      </td>
+    </tr>
     <tr id="stardoc-renderer">
       <td><code>renderer</code></td>
       <td>
         <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
         <p>
           The location of the renderer tool.
-         </p>
-       </td>
+        </p>
+      </td>
      </tr>
      <tr id="stardoc-rule_template">
        <td><code>rule_template</code></td>
        <td>
-         <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
-         <p>
-           The input file template for rules generated in documentation. 
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+        <p>
+          The input file template for rules generated in documentation. 
         </p>
       </td>
     </tr>
