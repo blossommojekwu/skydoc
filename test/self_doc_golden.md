@@ -108,7 +108,7 @@ This rule is an experimental replacement for the existing skylark_doc rule.
       <td>
         <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
         <p>
-          The input file template for rules generated in documentation. 
+           The input file template for rules generated in documentation. 
         </p>
       </td>
     </tr>
