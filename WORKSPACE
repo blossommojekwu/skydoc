@@ -68,6 +68,7 @@ http_archive(
     ],
 )
 
+# Needed as a transitive dependency of @io_bazel
 http_archive(
     name = "rules_proto",
     sha256 = "88b0a90433866b44bb4450d4c30bc5738b8c4f9c9ba14e9661deb123f56a833d",
