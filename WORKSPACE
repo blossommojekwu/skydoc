@@ -33,9 +33,18 @@ git_repository(
 # Needed for generating the Stardoc release binary.
 git_repository(
     name = "io_bazel",
-    commit = "bc5a9b1f0c55e97f9e9962384d10a03042bf05cb",  # Jul 24, 2019
+    commit = "320e45abe7bb12b954cb6e4566084bdbd45985eb",  # Aug 7, 2019
     remote = "https://github.com/bazelbuild/bazel.git",
 )
+
+git_repository(
+    name = "rules_python",
+    remote = "https://github.com/bazelbuild/rules_python.git",
+    commit = "4b84ad270387a7c439ebdccfd530e2339601ef27",
+)
+
+load("@rules_python//python:repositories.bzl", "py_repositories")
+py_repositories()
 
 http_archive(
     name = "rules_java",
@@ -65,6 +74,17 @@ http_archive(
     urls = [
         "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/rules_pkg-0.2.0.tar.gz",
         "https://github.com/bazelbuild/rules_pkg/releases/download/0.2.0/rules_pkg-0.2.0.tar.gz",
+    ],
+)
+
+# Needed as a transitive dependency of @io_bazel
+http_archive(
+    name = "rules_proto",
+    sha256 = "88b0a90433866b44bb4450d4c30bc5738b8c4f9c9ba14e9661deb123f56a833d",
+    strip_prefix = "rules_proto-b0cc14be5da05168b01db282fe93bdf17aa2b9f4",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz",
+        "https://github.com/bazelbuild/rules_proto/archive/b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz",
     ],
 )
 
